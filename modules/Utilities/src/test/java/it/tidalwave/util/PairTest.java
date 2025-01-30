@@ -25,12 +25,14 @@
  */
 package it.tidalwave.util;
 
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static java.util.stream.Collectors.*;
@@ -349,6 +351,28 @@ public class PairTest
                                                                 Pair.of(3, "string-d"),
                                                                 Pair.of(4, "string-e"));
         // END SNIPPET: zipPairTest1
+      }
+
+    /**********************************************************************************************************************************************************/
+    @Test(dataProvider = "evenOdd")
+    public void test_isEven_isOdd (@Nonnull final Pair<Integer, ?> underTest, final boolean expectedEven, final boolean expectedOdd)
+      {
+        // when
+        final var even = Pair.isEven(underTest);
+        final var odd = Pair.isOdd(underTest);
+        // then
+        assertThat(even).isEqualTo(expectedEven);
+        assertThat(odd).isEqualTo(expectedOdd);
+      }
+
+    @DataProvider
+    private static Object[] evenOdd()
+      {
+        return new Object[][]
+          {
+            { Pair.of(3, "foo bar"), false, true },
+            { Pair.of(4, "foo bar"), true, false }
+          };
       }
 
     /**********************************************************************************************************************************************************/

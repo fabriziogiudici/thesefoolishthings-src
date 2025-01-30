@@ -128,6 +128,8 @@ public class Pair<A, B>
      * @param       <T>             the type of the elements
      * @param       array           the array
      * @return                      the stream
+     * @see         #isEven(Pair)
+     * @see         #isOdd(Pair)
      **********************************************************************************************************************************************************/
     @Nonnull
     public static <T> Stream<Pair<Integer, T>> indexedPairStream (@Nonnull final T[] array)
@@ -143,6 +145,8 @@ public class Pair<A, B>
      * @param       array             the array
      * @param       rebaser           the rebaser of the index (BASE_0, BASE_1 or a similar function)
      * @return                        the stream
+     * @see         #isEven(Pair)
+     * @see         #isOdd(Pair)
      **********************************************************************************************************************************************************/
     @Nonnull
     public static <T> Stream<Pair<Integer, T>> indexedPairStream (@Nonnull final T[] array,
@@ -194,6 +198,8 @@ public class Pair<A, B>
      * @param       <T>             the type of the elements
      * @param       iterable        the iterable
      * @return                      the stream
+     * @see         #isEven(Pair)
+     * @see         #isOdd(Pair)
      **********************************************************************************************************************************************************/
     @Nonnull
     public static <T> Stream<Pair<Integer, T>> indexedPairStream (@Nonnull final Iterable<? extends T> iterable)
@@ -209,6 +215,8 @@ public class Pair<A, B>
      * @param       iterable          the iterable
      * @param       rebaser           the rebaser of the index (BASE_0, BASE_1 or a similar function)
      * @return                        the stream
+     * @see         #isEven(Pair)
+     * @see         #isOdd(Pair)
      **********************************************************************************************************************************************************/
     @Nonnull
     public static <T> Stream<Pair<Integer, T>> indexedPairStream (@Nonnull final Iterable<? extends T> iterable,
@@ -416,6 +424,28 @@ public class Pair<A, B>
                                                  @Nonnull final Stream<? extends B> streamB)
       {
         return StreamUtils.zip(streamA, streamB);
+      }
+
+    /***********************************************************************************************************************************************************
+     * {@return {@code true} if the given pair with an integer member has an even integer}.
+     * @param   pair        the pair
+     * @since   5.0-ALPHA-3
+     * @see     #indexedPairStream(Object[])
+     **********************************************************************************************************************************************************/
+    public static boolean isEven (@Nonnull final Pair<Integer, ?> pair)
+      {
+        return pair.a % 2 == 0;
+      }
+
+    /***********************************************************************************************************************************************************
+     * {@return {@code true} if the given pair with an integer member has an odd integer}.
+     * @param   pair        the pair
+     * @since   5.0-ALPHA-3
+     * @see     #indexedPairStream(Object[])
+     **********************************************************************************************************************************************************/
+    public static boolean isOdd (@Nonnull final Pair<Integer, ?> pair)
+      {
+        return pair.a % 2 != 0;
       }
 
     /* @NotThreadSafe */
