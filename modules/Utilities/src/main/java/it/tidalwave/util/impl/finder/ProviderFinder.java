@@ -31,13 +31,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
-import it.tidalwave.util.Finder;
 import it.tidalwave.util.spi.SimpleFinderSupport;
 
 /***************************************************************************************************************************************************************
  *
- * A {@link Finder} which retrieve results from a {@link Supplier}.
+ * A {@link it.tidalwave.util.Finder} which retrieves results from a provider. Don't use directly; use
+ * {@link it.tidalwave.util.Finder#ofProvider(BiFunction)} (Finder, Function)} instead.
  *
  * @author  Fabrizio Giudici
  *
@@ -50,19 +49,32 @@ public class ProviderFinder<T> extends SimpleFinderSupport<T>
     @Nonnull
     private final BiFunction<Integer, Integer, ? extends Collection<? extends T>> supplier;
 
+    /***********************************************************************************************************************************************************
+     * Creates a new instance given a supplier.
+     * @param   supplier    the supplier
+     **********************************************************************************************************************************************************/
     @SuppressWarnings("BoundedWildcard")
     public ProviderFinder (@Nonnull final BiFunction<Integer, Integer, ? extends Collection<? extends T>> supplier)
       {
         this.supplier = supplier;
       }
 
+    /***********************************************************************************************************************************************************
+     * The special Finder copy constructor.
+     * @param   other       the finder to copy
+     * @param   override    the overriding object
+     **********************************************************************************************************************************************************/
+    @SuppressWarnings("unchecked")
     public ProviderFinder (@Nonnull final ProviderFinder<T> other, @Nonnull final Object override)
       {
         super(other, override);
-        final ProviderFinder<T> source = getSource(ProviderFinder.class, other, override);
+        final var source = getSource(ProviderFinder.class, other, override);
         this.supplier = source.supplier;
       }
 
+    /***********************************************************************************************************************************************************
+     * {@inheritDoc}
+     **********************************************************************************************************************************************************/
     @Override @Nonnull
     protected List<T> computeNeededResults()
       {

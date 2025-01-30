@@ -74,7 +74,7 @@ public interface IdFactory
      * @return               the new id
      **********************************************************************************************************************************************************/
     @Nonnull
-    public default Id createId (@Nonnull Class<?> objectClass)
+    public default Id createId (@Nonnull final Class<?> objectClass)
       {
         return createId();
       }
@@ -88,7 +88,7 @@ public interface IdFactory
      * @return               the new id
      **********************************************************************************************************************************************************/
     @Nonnull
-    public default Id createId (@Nonnull Class<?> objectClass, @Nonnull Object object)
+    public default Id createId (@Nonnull final Class<?> objectClass, @Nonnull final Object object)
       {
         return createId(objectClass);
       }

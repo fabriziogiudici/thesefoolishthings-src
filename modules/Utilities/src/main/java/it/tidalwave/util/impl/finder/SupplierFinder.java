@@ -31,12 +31,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
-import it.tidalwave.util.Finder;
 import it.tidalwave.util.spi.SimpleFinderSupport;
 
 /***************************************************************************************************************************************************************
  *
- * A {@link Finder} which retrieve results from a {@link Supplier}.
+ * A {@link it.tidalwave.util.Finder} which retrieve results from a {@link Supplier}. Don't use directly; use
+ * {@link it.tidalwave.util.Finder#ofSupplier(Supplier)} instead.
  *
  * @author  Fabrizio Giudici
  *
@@ -49,18 +49,31 @@ public class SupplierFinder<T> extends SimpleFinderSupport<T>
     @Nonnull
     private final Supplier<? extends Collection<? extends T>> supplier;
 
+    /***********************************************************************************************************************************************************
+     * Creates a new instance given a supplier.
+     * @param   supplier    the supplier
+     **********************************************************************************************************************************************************/
     public SupplierFinder (@Nonnull final Supplier<? extends Collection<? extends T>> supplier)
       {
         this.supplier = supplier;
       }
 
+    /***********************************************************************************************************************************************************
+     * The special Finder copy constructor.
+     * @param   other       the finder to copy
+     * @param   override    the overriding object
+     **********************************************************************************************************************************************************/
+    @SuppressWarnings("unchecked")
     public SupplierFinder (@Nonnull final SupplierFinder<T> other, @Nonnull final Object override)
       {
         super(other, override);
-        final SupplierFinder<T> source = getSource(SupplierFinder.class, other, override);
+        final var source = getSource(SupplierFinder.class, other, override);
         this.supplier = source.supplier;
       }
 
+    /***********************************************************************************************************************************************************
+     * {@inheritDoc}
+     **********************************************************************************************************************************************************/
     @Override @Nonnull
     protected List<T> computeResults() // FIXME: or computeNeededResults()?
       {

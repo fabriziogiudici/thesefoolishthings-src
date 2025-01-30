@@ -35,12 +35,15 @@ import static java.util.stream.Collectors.*;
 
 /***************************************************************************************************************************************************************
  *
- * A {@link Finder} which retrieve results from another instance applying a {@link Function}.
+ * A {@link it.tidalwave.util.Finder} which retrieves results from another instance applying a mapper {@link Function}. Don't use directly; use
+ * {@link it.tidalwave.util.Finder#mapping(Finder, Function)} instead.
  *
+ * @param   <T>   the mapped type
+ * @param   <U>   the type of the delegate Finder
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
-/* @Immutable */ 
+/* @Immutable */
 public final class MappingFinder<T, U> extends SimpleFinderSupport<T>
   {
     private static final long serialVersionUID = -6359683808082070089L;
@@ -49,26 +52,39 @@ public final class MappingFinder<T, U> extends SimpleFinderSupport<T>
     private final Finder<? extends U> delegate;
 
     @Nonnull
-    private final Function<? super U, ? extends T> decorator;
+    private final Function<? super U, ? extends T> mapper;
 
-    public MappingFinder (@Nonnull final Finder<? extends U> delegate,
-                          @Nonnull final Function<? super U, ? extends T> decorator)
+    /***********************************************************************************************************************************************************
+     * Creates a new instance given a delegate and a mapper function.
+     * @param   delegate    the delegate
+     * @param   mapper      the mapper function
+     **********************************************************************************************************************************************************/
+    public MappingFinder (@Nonnull final Finder<? extends U> delegate, @Nonnull final Function<? super U, ? extends T> mapper)
       {
         this.delegate = delegate;
-        this.decorator = decorator;
+        this.mapper = mapper;
       }
 
+    /***********************************************************************************************************************************************************
+     * The special Finder copy constructor.
+     * @param   other       the finder to copy
+     * @param   override    the overriding object
+     **********************************************************************************************************************************************************/
+    @SuppressWarnings("unchecked")
     public MappingFinder (@Nonnull final MappingFinder<T, ?> other, @Nonnull final Object override)
       {
         super(other, override);
-        final MappingFinder<T, U> source = getSource(MappingFinder.class, other, override);
+        final var source = getSource(MappingFinder.class, other, override);
         this.delegate = source.delegate;
-        this.decorator = source.decorator;
+        this.mapper = source.mapper;
       }
 
+    /***********************************************************************************************************************************************************
+     * {@inheritDoc}
+     **********************************************************************************************************************************************************/
     @Override @Nonnull
     protected List<T> computeResults()
       {
-        return delegate.results().stream().map(decorator).collect(toList());
+        return delegate.results().stream().map(mapper).collect(toList());
       }
   }

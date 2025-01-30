@@ -43,15 +43,11 @@ import static it.tidalwave.util.CollectionUtils.concat;
 
 /***************************************************************************************************************************************************************
  *
- * A support class for implementing a {@link Finder}. Subclasses only need to implement the {@link #computeResults()}
- * method where <i>raw</i> results are retrieved (with raw we mean that they shouldn't be filtered or sorted, as
- * post-processing will be performed by this class) and a clone constructor.
- *
- * If you don't need to extend the {@link Finder} with extra methods, please use the simplified
- * {@link SimpleFinderSupport}.
+ * A support class for implementing a {@link Finder}. Subclasses only need to implement the {@link #computeResults()} method where <i>raw</i> results are
+ * retrieved (with raw we mean that they shouldn't be filtered or sorted, as post-processing will be performed by this class) and a clone constructor.
+ * If you don't need to extend the {@link Finder} with extra methods, please use the simplified {@link SimpleFinderSupport}.
  *
  * @author Fabrizio Giudici
- * @it.tidalwave.javadoc.draft
  *
  **************************************************************************************************************************************************************/
 @Slf4j @AllArgsConstructor(access = AccessLevel.PRIVATE) @ToString
@@ -98,7 +94,6 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
 
     /***********************************************************************************************************************************************************
      * Creates an instance with the given name (that will be used for diagnostics).
-     *
      * @param  name   the name
      **********************************************************************************************************************************************************/
     protected HierarchicFinderSupport (@Nonnull final String name)
@@ -126,10 +121,10 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
 
     /***********************************************************************************************************************************************************
      * Clone constructor for subclasses.
-     *
      * @param   other     the other instance to clone
      * @param   holder    the holder object
      **********************************************************************************************************************************************************/
+    @SuppressWarnings("unchecked")
     protected HierarchicFinderSupport (@Nonnull final HierarchicFinderSupport<T, F> other, @Nonnull final Object holder)
       {
         log.trace("HierarchicFinderSupport({}, {})", other, holder);
@@ -142,25 +137,22 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
       }
 
     /***********************************************************************************************************************************************************
-     * This method throws an exception since a {@code Finder} extending this class must be cloned with
-     * {@link #clonedWith(Object)}.
-     * 
+     * This method throws an exception since a {@code Finder} extending this class must be cloned with {@link #clonedWith(Object)}.
      * @see #clonedWith(Object)
      * @deprecated
      **********************************************************************************************************************************************************/
     @Override @Nonnull
     public final HierarchicFinderSupport<T, F> clone()
       {
-        throw new UnsupportedOperationException("\"HierarchicFinderSupport.clone() no more supported");
+        throw new UnsupportedOperationException("HierarchicFinderSupport.clone() no more supported");
       }
 
     /***********************************************************************************************************************************************************
      * Create a clone of this object calling the special copy constructor by reflection.
-     *
      * @param   override  the override object
      * @return            the clone
      **********************************************************************************************************************************************************/
-    @Nonnull
+    @Nonnull @SuppressWarnings("unchecked")
     protected F clonedWith (@Nonnull final Object override)
       {
         try
@@ -177,7 +169,6 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
 
     /***********************************************************************************************************************************************************
      * Create a clone of this object calling the special clone constructor by reflection.
-     *
      * @param   override  the override object
      * @return            the clone
      * @deprecated        Use {@link #clonedWith(Object)} instead.
@@ -272,7 +263,6 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
 
     /***********************************************************************************************************************************************************
      * Subclasses can implement this method where *all* the raw results must be actually retrieved.
-     *
      * @return  the unprocessed results
      **********************************************************************************************************************************************************/
     // START SNIPPET: computeResults
@@ -285,7 +275,6 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
 
     /***********************************************************************************************************************************************************
      * Subclasses can implement this method where *only the requested* raw results must be retrieved.
-     *
      * @return  the unprocessed results
      **********************************************************************************************************************************************************/
     // START SNIPPET: computeNeededResults
@@ -316,9 +305,8 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
       }
 
     /***********************************************************************************************************************************************************
-     * A utility method used by the copy constructor (see general documentation). If the override object is strictly
-     * of the specified type, it is returned; otherwise the other object is returned.
-     *
+     * A utility method used by the copy constructor (see general documentation). If the override object is strictly of the specified type, it is returned;
+     * otherwise the other object is returned.
      * @param <U>       the static type of the source
      * @param type      the dynamic type of the source
      * @param other     the other finder
@@ -334,6 +322,7 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
       }
 
     /***********************************************************************************************************************************************************
+     *
      **********************************************************************************************************************************************************/
     @Nonnull @SuppressWarnings("unchecked")
     private Constructor<HierarchicFinderSupport<T, F>> getCloneConstructor()
@@ -343,6 +332,7 @@ public class HierarchicFinderSupport<T, F extends Finder<T>> implements Finder<T
       }
 
     /***********************************************************************************************************************************************************
+     *
      **********************************************************************************************************************************************************/
     private void checkSubClass ()
       {

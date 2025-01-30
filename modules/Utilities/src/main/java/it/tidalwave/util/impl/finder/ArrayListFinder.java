@@ -35,12 +35,10 @@ import it.tidalwave.util.spi.SimpleFinderSupport;
 
 /***************************************************************************************************************************************************************
  *
- * An implementation of {@link it.tidalwave.util.Finder} which holds an immutable list of items.
- *
- * This class is now implementation only; please use {@link it.tidalwave.util.Finder#ofCloned} instead.
+ * An implementation of {@link it.tidalwave.util.Finder} which holds an immutable list of items. Don't use directly; use
+ * {@link it.tidalwave.util.Finder#ofCloned} instead.
  *
  * @param  <T>   the type of contained items
- *
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
@@ -51,11 +49,21 @@ public class ArrayListFinder<T> extends SimpleFinderSupport<T>
     @Nonnull
     private final Collection<T> items;
 
+    /***********************************************************************************************************************************************************
+     * Creates a new instance given the items.
+     * @param   items      the items
+     **********************************************************************************************************************************************************/
     public ArrayListFinder (@Nonnull final Collection<? extends T> items)
       {
         this.items = Collections.unmodifiableCollection(new ArrayList<>(items));
       }
 
+    /***********************************************************************************************************************************************************
+     * The special Finder copy constructor.
+     * @param   other       the finder to copy
+     * @param   override    the overriding object
+     **********************************************************************************************************************************************************/
+    @SuppressWarnings("unchecked")
     public ArrayListFinder (@Nonnull final ArrayListFinder<T> other, @Nonnull final Object override)
       {
         super(other, override);
@@ -63,6 +71,9 @@ public class ArrayListFinder<T> extends SimpleFinderSupport<T>
         this.items = source.items;
       }
 
+    /***********************************************************************************************************************************************************
+     * {@inheritDoc}
+     **********************************************************************************************************************************************************/
     @Override @Nonnull
     protected List<T> computeResults()
       {

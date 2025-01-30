@@ -98,8 +98,7 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
 
                     if (context.isEmpty())
                       {
-                        log.trace(">>>> role {} discarded, can't find context: {}",
-                                  shortName(roleImplementationType), shortName(contextType.get()));
+                        log.trace(">>>> role {} discarded, can't find context: {}", shortName(roleImplementationType), shortName(contextType.get()));
                         continue outer;
                       }
                   }
@@ -110,8 +109,7 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
                     roles.add(roleType.cast(constructor.newInstance(params)));
                     break;
                   }
-                catch (InstantiationException | IllegalAccessException
-                        | IllegalArgumentException | InvocationTargetException e)
+                catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
                   {
                     log.error("Could not instantiate role of type " + roleImplementationType, e);
                   }
@@ -127,9 +125,8 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
       }
 
     /***********************************************************************************************************************************************************
-     * Prepare the constructor parameters out of the given expected types. Parameters will be eventually made of the
-     * given datum, context, and other objects returned by {@link #getBean(java.lang.Class)}.
-     *
+     * Prepare the constructor parameters out of the given expected types. Parameters will be eventually made of the given datum, context, and other objects
+     * returned by {@link #getBean(java.lang.Class)}.
      * @param   parameterTypes      the expected types
      * @param   datumClass          the type of the datum
      * @param   datum               the datum
@@ -167,20 +164,16 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
       }
 
     /***********************************************************************************************************************************************************
-     * Finds the role implementations for the given owner type and role type. This method might discover new
-     * implementations that weren't found during the initial scan, since the initial scan can't go down in a
-     * hierarchy; that is, given a Base class or interface with some associated roles, it can't associate those roles
-     * to subclasses (or implementations) of Base. Now we can navigate up the hierarchy and complete the picture.
-     * Each new discovered role is added into the map, so the next time scanning will be faster.
-     *
+     * Finds the role implementations for the given owner type and role type. This method might discover new implementations that weren't found during the
+     * initial scan, since the initial scan can't go down in a hierarchy; that is, given a Base class or interface with some associated roles, it can't
+     * associate those roles to subclasses (or implementations) of Base. Now we can navigate up the hierarchy and complete the picture. Each new discovered role
+     * is added into the map, so the next time scanning will be faster.
      * @param   datumType       the type of the datum
      * @param   roleType        the type of the role to find
      * @return                  the types of role implementations
      **********************************************************************************************************************************************************/
     @Nonnull
-    @VisibleForTesting synchronized <T> Set<Class<? extends T>> findRoleImplementationsFor (
-            @Nonnull final Class<?> datumType,
-            @Nonnull final Class<T> roleType)
+    @VisibleForTesting synchronized <T> Set<Class<? extends T>> findRoleImplementationsFor (@Nonnull final Class<?> datumType, @Nonnull final Class<T> roleType)
       {
         final var datumAndRole = new OwnerAndRole(datumType, roleType);
 
@@ -202,8 +195,7 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
       }
 
     /***********************************************************************************************************************************************************
-     * Scans all the given role implementation classes and build a map of roles by owner class.
-     *
+     * Scans all the given role implementation classes and builds a map of roles by owner class.
      * @param   roleImplementationTypes     the types of role implementations to scan
      **********************************************************************************************************************************************************/
     protected synchronized void scan (@Nonnull final Collection<Class<?>> roleImplementationTypes)
@@ -228,9 +220,8 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
       }
 
     /***********************************************************************************************************************************************************
-     * Finds all the interfaces implemented by a given class, including those eventually implemented by superclasses
-     * and interfaces that are indirectly implemented (e.g. C implements I1, I1 extends I2).
-     *
+     * Finds all the interfaces implemented by a given class, including those eventually implemented by superclasses and interfaces that are indirectly
+     * implemented (e.g. C implements I1, I1 extends I2).
      * @param  clazz    the class to inspect
      * @return          the implemented interfaces
      **********************************************************************************************************************************************************/
@@ -255,10 +246,9 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
 
     /***********************************************************************************************************************************************************
      * Retrieves an extra bean.
-     *
-     * @param <T>           the static type of the bean
-     * @param beanType      the dynamic type of the bean
-     * @return              the bean
+     * @param <T>                           the static type of the bean
+     * @param beanType                      the dynamic type of the bean
+     * @return                              the bean
      **********************************************************************************************************************************************************/
     @Nonnull
     protected <T> Optional<T> getBean (@Nonnull final Class<T> beanType)
@@ -268,7 +258,6 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
 
     /***********************************************************************************************************************************************************
      * Returns the type of the context associated to the given role implementation type.
-     *
      * @param   roleImplementationType      the role type
      * @return                              the context type
      **********************************************************************************************************************************************************/
@@ -281,7 +270,6 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
 
     /***********************************************************************************************************************************************************
      * Returns the valid datum types for the given role implementation type.
-     *
      * @param   roleImplementationType      the role type
      * @return                              the datum types
      **********************************************************************************************************************************************************/
@@ -292,10 +280,9 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
       }
 
     /***********************************************************************************************************************************************************
+     *
      **********************************************************************************************************************************************************/
-    private void logChanges (@Nonnull final OwnerAndRole ownerAndRole,
-                             @Nonnull final Set<Class<?>> before,
-                             @Nonnull final Set<Class<?>> after)
+    private void logChanges (@Nonnull final OwnerAndRole ownerAndRole, @Nonnull final Set<Class<?>> before, @Nonnull final Set<Class<?>> after)
       {
         after.removeAll(before);
 
@@ -311,28 +298,23 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
       }
 
     /***********************************************************************************************************************************************************
+     *
      **********************************************************************************************************************************************************/
     public void logRoles()
       {
         log.debug("Configured roles:");
-
         final var entries = new ArrayList<>(roleMapByOwnerAndRole.entrySet());
         entries.sort(comparing((Map.Entry<OwnerAndRole, Set<Class<?>>> e) -> e.getKey().getOwnerClass().getName())
                                .thenComparing(e -> e.getKey().getRoleClass().getName()));
 
         for (final var entry : entries)
           {
-            log.debug(">>>> {}: {} -> {}",
-                      shortName(entry.getKey().getOwnerClass()),
-                      shortName(entry.getKey().getRoleClass()),
-                      shortNames(entry.getValue()));
+            log.debug(">>>> {}: {} -> {}", shortName(entry.getKey().getOwnerClass()), shortName(entry.getKey().getRoleClass()), shortNames(entry.getValue()));
           }
       }
 
     /***********************************************************************************************************************************************************
-     * Returns the type of an object, taking care of mocks created by Mockito, for which the implemented interface is
-     * returned.
-     *
+     * Returns the type of object, taking care of mocks created by Mockito, for which the implemented interface is returned.
      * @param  object   the object
      * @return          the object type
      **********************************************************************************************************************************************************/
@@ -347,8 +329,7 @@ public abstract class SystemRoleFactorySupport implements SystemRoleFactory
 
             if (log.isTraceEnabled())
               {
-                log.trace(">>>> owner is a mock {} implementing {}",
-                          shortName(ownerClass), shortNames(List.of(ownerClass.getInterfaces())));
+                log.trace(">>>> owner is a mock {} implementing {}", shortName(ownerClass), shortNames(List.of(ownerClass.getInterfaces())));
                 log.trace(">>>> owner class replaced with {}", shortName(ownerClass));
               }
           }
