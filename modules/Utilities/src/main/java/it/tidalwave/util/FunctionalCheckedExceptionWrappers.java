@@ -96,7 +96,7 @@ public final class FunctionalCheckedExceptionWrappers
     public static interface FunctionWithException<T, R>
       {
         public R apply (T t)
-                throws Exception;
+                throws Throwable;
       }
 
     /***********************************************************************************************************************************************************
@@ -110,7 +110,7 @@ public final class FunctionalCheckedExceptionWrappers
     public static interface ConsumerWithException<T>
       {
         public void accept (T t)
-                throws Exception;
+                throws Throwable;
       }
 
     /***********************************************************************************************************************************************************
@@ -124,7 +124,7 @@ public final class FunctionalCheckedExceptionWrappers
     public static interface SupplierWithException<T>
       {
         public T get ()
-                throws Exception;
+                throws Throwable;
       }
 
     /***********************************************************************************************************************************************************
@@ -138,7 +138,7 @@ public final class FunctionalCheckedExceptionWrappers
     public static interface PredicateWithException<T>
       {
         public boolean test (T t)
-                throws Exception;
+                throws Throwable;
       }
 
     /***********************************************************************************************************************************************************
@@ -172,7 +172,7 @@ public final class FunctionalCheckedExceptionWrappers
               {
                 return function.apply(t);
               }
-            catch (Exception e)
+            catch (Throwable e)
               {
                 throw wrappedException(e);
               }
@@ -195,7 +195,7 @@ public final class FunctionalCheckedExceptionWrappers
               {
                 consumer.accept(t);
               }
-            catch (Exception e)
+            catch (Throwable e)
               {
                 throw wrappedException(e);
               }
@@ -218,7 +218,7 @@ public final class FunctionalCheckedExceptionWrappers
               {
                 return supplier.get();
               }
-            catch (Exception e)
+            catch (Throwable e)
               {
                 throw wrappedException(e);
               }
@@ -241,7 +241,7 @@ public final class FunctionalCheckedExceptionWrappers
               {
                 return predicate.test(t);
               }
-            catch (Exception e)
+            catch (Throwable e)
               {
                 throw wrappedException(e);
               }
