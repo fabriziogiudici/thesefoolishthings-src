@@ -27,9 +27,11 @@ package it.tidalwave.util;
 
 import jakarta.annotation.Nonnull;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /***************************************************************************************************************************************************************
  *
@@ -39,7 +41,7 @@ import lombok.NoArgsConstructor;
  * @author  Fabrizio Giudici
  *
  **************************************************************************************************************************************************************/
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE) @Slf4j
 public final class BundleUtilities
   {
     /***********************************************************************************************************************************************************
@@ -74,10 +76,17 @@ public final class BundleUtilities
                                        @Nonnull final String resourceName,
                                        @Nonnull final Object ... params)
       {
-        final var packageName = ownerClass.getPackage().getName();
-        final var bundle = ResourceBundle.getBundle(packageName + ".Bundle", locale);
-        final var string = bundle.getString(resourceName);
-
-        return (params.length == 0) ? string : String.format(string, params);
+        try
+          {
+            final var packageName = ownerClass.getPackage().getName();
+            final var bundle = ResourceBundle.getBundle(packageName + ".Bundle", locale);
+            final var string = bundle.getString(resourceName);
+            return (params.length == 0) ? string : String.format(string, params);
+          }
+        catch (MissingResourceException e)
+          {
+            log.error("", e);
+            return "Missing resource: " + resourceName;
+          }
       }
   }
