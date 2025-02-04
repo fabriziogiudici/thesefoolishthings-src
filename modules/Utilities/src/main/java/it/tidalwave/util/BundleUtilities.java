@@ -45,48 +45,42 @@ import lombok.extern.slf4j.Slf4j;
 public final class BundleUtilities
   {
     /***********************************************************************************************************************************************************
-     * Returns a localised message.
-     *
-     * @param   ownerClass      the owner of the bundle
-     * @param   resourceName    the name of the resource inside the bundle
-     * @param   params          the parameters (used if the string in the bundle is a {@code String} format)
-     * @return                  the message
+     * {@return a localised message}.
+     * @param   clazz                 the owner of the bundle
+     * @param   key                   the key of the resource inside the bundle
+     * @param   params                the parameters (used if the string in the bundle is a {@code String} format)
      **********************************************************************************************************************************************************/
     @Nonnull
-    public static String getMessage (@Nonnull final Class<?> ownerClass,
-                                     @Nonnull final String resourceName,
-                                     @Nonnull final Object ... params)
+    public static String getMessage (@Nonnull final Class<?> clazz, @Nonnull final String key, @Nonnull final Object ... params)
       {
-        return getMessage(ownerClass, Locale.getDefault(), resourceName, params);
+        return getMessage(clazz, Locale.getDefault(), key, params);
       }
 
     /***********************************************************************************************************************************************************
-     * Returns a localised message.
-     *
+     * {@return a localised message}.
      * @since   3.1-ALPHA-4
-     * @param   ownerClass      the owner of the bundle
-     * @param   locale          the {@link Locale}
-     * @param   resourceName    the name of the resource inside the bundle
-     * @param   params          the parameters (used if the string in the bundle is a {@code String} format)
-     * @return                  the message
+     * @param   clazz                 the owner of the bundle
+     * @param   locale                the {@link Locale}
+     * @param   key                   the key of the resource inside the bundle
+     * @param   params                the parameters (used if the string in the bundle is a {@code String} format)
      **********************************************************************************************************************************************************/
-      @Nonnull
-      public static String getMessage (@Nonnull final Class<?> ownerClass,
-                                       @Nonnull final Locale locale,
-                                       @Nonnull final String resourceName,
-                                       @Nonnull final Object ... params)
+    @Nonnull
+    public static String getMessage (@Nonnull final Class<?> clazz, @Nonnull final Locale locale, @Nonnull final String key, @Nonnull final Object ... params)
       {
         try
           {
-            final var packageName = ownerClass.getPackage().getName();
-            final var bundle = ResourceBundle.getBundle(packageName + ".Bundle", locale);
-            final var string = bundle.getString(resourceName);
-            return (params.length == 0) ? string : String.format(string, params);
+            final var moduleName = clazz.getModule().getName();
+            final var packageName = clazz.getPackage().getName();
+            final var bundleName = packageName + ".Bundle";
+            final var bundle = moduleName == null ? ResourceBundle.getBundle(bundleName, locale)
+                                                  : ResourceBundle.getBundle(bundleName, locale, clazz.getModule());
+            final var string = bundle.getString(key);
+            return params.length == 0 ? string : String.format(string, params);
           }
         catch (MissingResourceException e)
           {
             log.error("", e);
-            return "Missing resource: " + resourceName;
+            return "Missing resource: " + key;
           }
       }
   }
